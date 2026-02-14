@@ -1,5 +1,4 @@
 name: Gem Upgrade Review
-
 on:
   pull_request_target:
     types: [opened, reopened, synchronize]
@@ -12,37 +11,31 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
-  
+
 jobs:
   review-gems:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     env:
       GEM_REVIEW_PATH: gem_review.md
+      # Add your API key here (Make sure to add this secret in GitHub Repo Settings)
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} 
 
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0  # we need history to read base Gemfile.lock
+          fetch-depth: 0
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3"   # or your repo's Ruby version
+          ruby-version: "3.3"
           bundler-cache: false
 
       - name: Generate dependency review comment
         run: ruby .github/scripts/gem_diff.rb
-
-      - name: Verify gem_review.md exists
-        run: |
-          test -f "$GEM_REVIEW_PATH"
-          test -s "$GEM_REVIEW_PATH"
-          echo "=== gem_review.md contents ==="
-          cat "$GEM_REVIEW_PATH"
-          echo "=== end ==="
 
       - name: Comment on PR with dependency summary
         if: github.event.pull_request != null
