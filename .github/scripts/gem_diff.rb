@@ -46,8 +46,11 @@ end
 def ask_llm_for_review(prompt)
   api_key = ENV["GEMINI_API_KEY"]
   return nil unless api_key # Fallback if no key provided
-  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=#{api_key}")
+  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=#{api_key}")
+  # uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=#{api_key}")
+  # uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=#{api_key}")
   # uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=#{api_key}")
+
   
   # For OpenAI, swap with: URI("https://api.openai.com/v1/chat/completions")
   # and adjust the JSON payload accordingly.
