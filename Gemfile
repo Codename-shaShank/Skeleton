@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+ruby '3.3.0'
 
 # PostgreSQL driver
 gem 'pg'
@@ -27,4 +27,5 @@ group :test, :development do
   gem 'rspec'
   gem 'factory_girl'
   gem 'faker'
+  gem 'rubocop'
 end
