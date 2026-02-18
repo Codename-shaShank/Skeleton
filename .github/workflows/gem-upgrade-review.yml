@@ -1,0 +1,62 @@
+name: Gem Upgrade Review
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+    paths:
+      - "Gemfile"
+      - "Gemfile.lock"
+      - "*.gemspec"
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  
+jobs:
+  review-gems:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    env:
+      GEM_REVIEW_PATH: gem_review.md
+
+    steps:
+      - name: Checkout base branch (trusted code)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0  # we need history to read base and PR Gemfile.lock
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3.0"   
+          bundler-cache: false
+
+      - name: Fetch PR Gemfile.lock safely
+        run: |
+          git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-branch
+          git show pr-branch:Gemfile.lock > pr_gemfile.lock
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
+      - name: Generate dependency review comment
+        run: ruby .github/scripts/gem_diff.rb
+        env:
+          PR_GEMFILE_LOCK_PATH: pr_gemfile.lock
+
+      - name: Verify gem_review.md exists
+        run: |
+          test -f "$GEM_REVIEW_PATH"
+          test -s "$GEM_REVIEW_PATH"
+          echo "=== gem_review.md contents ==="
+          cat "$GEM_REVIEW_PATH"
+          echo "=== end ==="
+
+      - name: Comment on PR with dependency summary
+        if: github.event.pull_request != null
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ github.token }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-file: ${{ env.GEM_REVIEW_PATH }}
