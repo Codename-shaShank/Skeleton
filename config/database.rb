@@ -31,6 +31,29 @@ DB_NAME = db.path[1..-1]
 #   if ENV['RACK_ENV'] is set.  If ENV['RACK_ENV'] is not set, it defaults
 #   to :development
 
+# Connection configuration
+# Note: pg gem 0.17.1 -> 0.18.4 upgrade doesn't require code changes here
+# because we use ActiveRecord which abstracts the pg gem API.
+# If we needed pg-version-specific behavior, we would use:
+#
+# connection_options = {
+#   :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+#   :host     => db.host,
+#   :port     => db.port,
+#   :username => db.user,
+#   :password => db.password,
+#   :database => DB_NAME,
+#   :encoding => 'utf8'
+# }
+#
+# if K2Config.dependency_upgraded_next?
+#   # pg 0.18.4 specific configuration (if needed)
+#   # Example: connection_options[:some_new_option] = value
+#   # Changelog: https://github.com/ged/ruby-pg/blob/master/CHANGELOG.md#v0184-2015-11-13
+# end
+#
+# ActiveRecord::Base.establish_connection(connection_options)
+
 ActiveRecord::Base.establish_connection(
   :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
   :host     => db.host,

@@ -37,6 +37,9 @@ configure do
   set :views, File.join(Sinatra::Application.root, "app", "views")
 end
 
+# Load K2Config for feature flags (dependency version management)
+require APP_ROOT.join('config', 'k2_config')
+
 # Set up the controllers and helpers
 Dir[APP_ROOT.join('app', 'controllers', '*.rb')].each { |file| require file }
 Dir[APP_ROOT.join('app', 'helpers', '*.rb')].each { |file| require file }
