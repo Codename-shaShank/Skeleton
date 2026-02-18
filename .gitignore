@@ -1,0 +1,40 @@
+# Database files
+*.sqlite3
+*.db
+db/*.sqlite3
+db/*.db
+
+# Logs
+*.log
+log/
+
+# Temporary files
+tmp/
+.tmp/
+
+# Environment files
+.env
+.env.local
+
+# Ruby
+*.gem
+*.rbc
+.bundle/
+vendor/bundle/
+
+# RSpec
+.rspec_status
+
+# Coverage
+coverage/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
