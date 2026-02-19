@@ -40,10 +40,10 @@ jobs:
           ruby-version: '3.3.0'
           bundler-cache: false
 
-      # Re-run your existing gem_diff to regenerate gem_review.md if needed
-      - name: Ensure gem_review.md exists (re-run gem_diff)
-        run: |
-          ruby .github/scripts/gem_diff.rb
+      
+    #   - name: Ensure gem_review.md exists (re-run gem_diff)
+    #     run: |
+    #       ruby .github/scripts/gem_diff.rb
 
       - name: Run deps usage finder
         run: |
