@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+# TODO(deps): Review usages of 'rake' in this file for version-specific changes.
+# TODO(deps): Review usages of 'sinatra' in this file for version-specific changes.
 
 require "pathname"
 
